@@ -29,18 +29,29 @@ const Alphabet = {
     const valueInDec = convertToDec(inputWeights, sourceBase);
     valueInDec;
 
-    const convertFromDec = (valueInDec, targetBase) => {
-      let targetIndices = [];
-      do {
-        valueInDec;
+      const convertFromDec = (value, base, acc = []) => {
+        if (Math.floor(value / base) !== 0) {
+          acc.push(value % base);
+          value /= base;
+          value;
+          acc;
 
-        targetIndices.push(valueInDec % targetBase);
-        valueInDec /= targetBase;
+          convertFromDec(value, base, acc);
+        } else {
+          acc.push(value % base);
+          acc;
+        }
+        return acc.reverse();
       }
-      while (valueInDec / targetBase !== 0 && valueInDec % targetBase !== 1 );
-      return targetIndices.reverse();
+      // let res = convertFromDec (valueInDec, targetBase);
+      // res;
+
+
+
+
+
+      console.log(convertFromDec(16, 2));
     }
-    console.log(convertFromDec(16, 2));
 
 
 
@@ -49,7 +60,7 @@ const Alphabet = {
 
 
 
-  }
+
 
 
 
