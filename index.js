@@ -1,82 +1,46 @@
-const Alphabet = {
-  BINARY:        '01',
-  OCTAL:         '01234567',
-  DECIMAL:       '0123456789',
-  HEXA_DECIMAL:  '0123456789abcdef',
-  ALPHA_LOWER:   'abcdefghijklmnopqrstuvwxyz',
-  ALPHA_UPPER:   'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  ALPHA:         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  ALPHA_NUMERIC: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-};
-
-
-
-  const convert = (input, source, target) => {
-    const inputArray = input.split('');
-    const sourceArray = source.split('');
-    const targetArray = target.split('');
-    const sourceBase = source.length;
-    const targetBase = target.length;
-    inputArray;
-    sourceArray;
-    const inputWeights = inputArray.map((item, i) => {
-      return sourceArray.indexOf(item);
-    });
-    inputWeights;
-    const convertToDec = (weights, base) => {
-      return weights.reduce((sum, item, i) => {
-        return sum += item * base ** (weights.length - 1 - i);
+function convert(input, source, target) {
+  const sourceBase = source.length;
+  const targetBase = target.length;
+  const inputWeights = input.split('').map((item, i) => {
+    return source.split('').indexOf(item);
+  });
+  const convertToDec = (weights, base) => {
+    return weights.reduce((sum, item, i) => {
+      return sum += item * base ** (weights.length - 1 - i);
+    }, 0);
+  }
+  const valueInDec = convertToDec(inputWeights, sourceBase);
+  const convertFromDec = (value, base, weights = []) => {
+    const check = (weights, value, target) => {
+      const current = weights.reduce((sum, item, i) => {
+        return sum += item * 10 ** (weights.length - 1 -i);
       }, 0);
+      return (current === value) || false;
     }
-    const valueInDec = convertToDec(inputWeights, sourceBase);
-    valueInDec;
-
-      const convertFromDec = (value, base, weights = []) => {
-        if (Math.floor(value / base) !== 0) {
-          weights.push(Math.floor(value % base));
-          value /= base;
-          base;
-          value;
-          weights;
-
-          convertFromDec(value, base, weights);
-        } else {
-          weights.push(Math.floor(value % base));
-          return weights;
-        }
-        weights;
-        return (check(weights, valueInDec)) ? weights.reverse() : weights;
-      }
-
-      let outputWeights = convertFromDec(valueInDec, targetBase);
-      outputWeights;
-
-
-
-
-      const outputArray = outputWeights.reduce((str, item) => {
-        return str += targetArray[item];
-      }, '');
-      outputArray;
-
-
-      // console.log(convertFromDec(16, 2));
-
-
-
+    if (Math.floor(value / base) !== 0) {
+      weights.push(Math.floor(value % base));
+      value /= base;
+      convertFromDec(value, base, weights);
+    } else {
+      weights.push(Math.floor(value % base));
+      return weights;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.log(convert('fdz', Alphabet.ALPHA_LOWER,  Alphabet.OCTAL));
+    return (check(weights, value, target)) ? weights.reverse() : weights;
+    }
+    const outputWeights = convertFromDec(valueInDec, targetBase);
+    const output = outputWeights.reduce((str, item) => {
+      return str += target.split('')[item];
+    }, '');
+    const reverseString = string => {
+      let reversed = [];
+      string.split('').forEach((item, i) => {
+        reversed.unshift(item);
+      });
+      return reversed.join('');
+    }
+    if (valueInDec === convertToDec(outputWeights, targetBase)) {
+      return output;
+    } else {
+      return reverseString(output);
+   }
+ }
