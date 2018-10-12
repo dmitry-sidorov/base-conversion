@@ -11,10 +11,12 @@ const Alphabet = {
 
 
 
-  const convert = (input, source) => {
+  const convert = (input, source, target) => {
     const inputArray = input.split('');
     const sourceArray = source.split('');
+    const targetArray = target.split('');
     const sourceBase = source.length;
+    const targetBase = target.length;
     inputArray;
     sourceArray;
     const inputWeights = inputArray.map((item, i) => {
@@ -29,28 +31,39 @@ const Alphabet = {
     const valueInDec = convertToDec(inputWeights, sourceBase);
     valueInDec;
 
-      const convertFromDec = (value, base, acc = []) => {
+      const convertFromDec = (value, base, weights = []) => {
         if (Math.floor(value / base) !== 0) {
-          acc.push(value % base);
+          weights.push(Math.floor(value % base));
           value /= base;
+          base;
           value;
-          acc;
+          weights;
 
-          convertFromDec(value, base, acc);
+          convertFromDec(value, base, weights);
         } else {
-          acc.push(value % base);
-          acc;
+          weights.push(Math.floor(value % base));
+          return weights;
         }
-        return acc.reverse();
+        weights;
+        return (check(weights, valueInDec)) ? weights.reverse() : weights;
       }
-      // let res = convertFromDec (valueInDec, targetBase);
-      // res;
+
+      let outputWeights = convertFromDec(valueInDec, targetBase);
+      outputWeights;
 
 
 
 
+      const outputArray = outputWeights.reduce((str, item) => {
+        return str += targetArray[item];
+      }, '');
+      outputArray;
 
-      console.log(convertFromDec(16, 2));
+
+      // console.log(convertFromDec(16, 2));
+
+
+
     }
 
 
@@ -66,4 +79,4 @@ const Alphabet = {
 
 
 
-console.log(convert('fdz', Alphabet.ALPHA_LOWER));
+console.log(convert('fdz', Alphabet.ALPHA_LOWER,  Alphabet.OCTAL));
